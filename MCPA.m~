@@ -1,0 +1,62 @@
+set(0,'DefaultFigureWindowStyle','docked')
+      
+% Constant and parameters
+m0 = 9.10938215e-31;             
+g = 9.80665;                     
+q = 1.60217653e-19;            
+
+dt = 0.1;   
+t = 0;
+N = 20;     % number of advancement
+L = 0;
+E = 10e3;
+F = q*E;
+
+
+% Set position and velocity at 0
+X = zeros(1,N);
+Vx = zeros(1,N);
+
+% Advance electron and update X and Vx
+for i = 2:N
+    dVx = F/m * dt;
+    Vx(i) = Vx(i-1) + dVx;
+    
+    dx = Vx(i-1) + dVx;
+    X(i) = X(i-1) + dx;
+    
+    dl = dl + dx;   % travel distance
+    t = t + dt;
+    
+    Pscat = 0.05;
+    if rand() <= Pscat
+        Vx(i) = 0;
+    end
+    
+    % Drift velocity calculation
+    Vdx = sum(Vx)/i;
+    
+    % Plots
+    subplot(2,1,1);
+    plot([t-dt,t],[x(i-1),x(i)]);
+    hold one;
+    xlabel('Time')
+    plot([time-dt, time], [x(i-1), x(i)]);
+    pause(0.000001);
+    xlabel('Time (s)');
+    ylabel('Position (m)');
+    title('Particle Position');
+    hold on;
+    
+    str = sprintf('Pjarticle Velocity, drift velocity (in green): %.3d m/s', drift_velocity);
+
+    subplot(2,1,2); 
+    plot([time-dt, time], [Vx(i-1), Vx(i)]);
+    pause(0.000001);
+    xlabel('Time (s)');
+    ylabel('Velocity (m/s)');
+    title(str);
+    hold on;
+    plot(time, drift_velocity, 'g*');
+    
+end
